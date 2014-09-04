@@ -14,15 +14,23 @@ module Parser
                 ret = @peek_line
                 @peek_line = nil
             else
-                ret = @io.readline.strip
+                ret = read_line
             end
 
             ret
         end
 
+        def read_line
+            if @io.eof?
+                nil
+            else
+                @io.readline.strip
+            end
+        end
+
         def peek_line
             if @peek_line.nil?
-                @peek_line = @io.readline.strip
+                @peek_line = read_line
             end
 
             @peek_line
