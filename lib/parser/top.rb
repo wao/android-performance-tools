@@ -51,9 +51,9 @@ module Parser
             mem = expect_mem
             cpu = expect_cpu
             loadstat = expect_load
-            ( pids, pid_set ) = expect_pids
+            ret = expect_pids
 
-            Sample.new( mem, cpu, loadstat, pids, pid_set )
+            Sample.new( mem, cpu, loadstat, *ret )
         end
 
         def expect_mem
