@@ -74,7 +74,7 @@ module Parser
 
         #Pid = Struct.new( :pid, :ppid, :user, :stat, :vsz, :vsz_usage, :cpu, :cpu_usage, :command )
 
-        Pid_field_length = [ 0, 6, 12, 22, 26, 32, 37, 41, 46 ] #last field COMMAND don't included
+        Pid_field_length = [ 0, 5, 11, 21, 25, 31, 36, 40, 45 ] #last field COMMAND don't included
 
         def expect_pids
             line = get_line
