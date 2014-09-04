@@ -64,7 +64,6 @@ __DATA__
         assert_equal 2.98, loadav.one 
 
         pids = nil
-        pidset = nil
         assert_nothing_thrown do
             pids = top.expect_pids
         end
