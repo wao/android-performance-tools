@@ -93,7 +93,7 @@ module Parser
         end
            
 
-        def expect_hash_with_header(io, header, sep)
+        def expect_hash_with_header(header, sep)
             line = get_line
             fields = line.split(sep)
             if fields.shift != header
