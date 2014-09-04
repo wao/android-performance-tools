@@ -2,7 +2,7 @@ module Parser
     # Parser busybox top -b output and put it into a list
     class Top
         Load = Struct.new( :one, :five, :fifteen )
-        Sample = Struct.new(:mem, :cpu, :load, :pids)
+        Sample = Struct.new(:mem, :cpu, :load, :pids, :pid_set)
 
         def initialize(io)
             @io = io
@@ -49,9 +49,9 @@ module Parser
             mem = expect_mem
             cpu = expect_cpu
             loadstat = expect_load
-            pids = expect_pids
+            ( pids, pid_set ) = expect_pids
 
-            Sample.new( mem, cpu, loadstat, pids )
+            Sample.new( mem, cpu, loadstat, pids, pid_set )
         end
 
         def expect_mem
@@ -80,6 +80,7 @@ module Parser
         Pid_field_length = [ 0, 5, 11, 21, 25, 31, 36, 40, 45 ] #last field COMMAND don't included
 
         def expect_pids
+            pid_set = Set.new
             line = get_line
             
             pid_fields = line.split(SEP_SPACES)
@@ -99,12 +100,13 @@ module Parser
                 end
 
                 pid_stat[ "COMMAND" ] = line.slice( Pid_field_length.last, line.length - Pid_field_length.last )
-                
+                 
                 pids.push pid_stat
+                pid_set.add( pid_stat["PID"] )
                 line = peek_line
             end
 
-            pids
+            ( pids, pidset )
         end
            
 
