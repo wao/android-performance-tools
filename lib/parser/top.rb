@@ -104,7 +104,7 @@ module Parser
                 pid_stat[ "COMMAND" ] = line.slice( Pid_field_length.last, line.length - Pid_field_length.last )
                  
                 pids.push pid_stat
-                pid_set.add( pid_stat["PID"] )
+                #pid_set.add( pid_stat["PID"] )
                 line = peek_line
             end
 
