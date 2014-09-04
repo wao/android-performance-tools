@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
+require 'parser/top'
+
 class TestParserTop < Test::Unit::TestCase
     def test_peek_and_getline
         sample = <<__DATA__
