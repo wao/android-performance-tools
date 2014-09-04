@@ -52,7 +52,7 @@ module Parser
         end
 
         def expect_mem
-            expect_hash_with_header( 'Mem', /[:|,]\s+/ )
+            expect_hash_with_header( 'Mem', /[:|,]?\s+/ )
         end
 
         def expect_cpu
