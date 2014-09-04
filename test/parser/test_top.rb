@@ -48,5 +48,12 @@ __DATA__
         assert_equal "0K", mem["shrd"]
         assert_equal "27448K", mem["buff"]
         assert_equal "195288K", mem["cached"]
+
+        cpu = nil
+        assert_nothing_thrown do
+            cpu = top.expect_cpu
+        end
+
+        assert_equal "4.3%", cpu["usr"]
     end
 end
