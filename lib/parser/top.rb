@@ -1,3 +1,5 @@
+require 'set'
+
 module Parser
     # Parser busybox top -b output and put it into a list
     class Top
