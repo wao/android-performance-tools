@@ -14,7 +14,7 @@ __DATA__
 
         top = Parser::Top.new(io)
 
-        assertEqual( 'Mem: 727484K used, 12848K free, 0K shrd, 27448K buff, 195288K cached', top.peek_line )
+        assertEquals( 'Mem: 727484K used, 12848K free, 0K shrd, 27448K buff, 195288K cached', top.peek_line )
         assertEqual( 'Mem: 727484K used, 12848K free, 0K shrd, 27448K buff, 195288K cached', top.peek_line )
         assertEqual( 'Mem: 727484K used, 12848K free, 0K shrd, 27448K buff, 195288K cached', top.get_line )
         assertEqual( 'CPU:  4.3% usr  6.5% sys  0.0% nic 89.1% idle  0.0% io  0.0% irq  0.0% sirq', top.get_line )
