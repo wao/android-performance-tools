@@ -95,7 +95,7 @@ module Parser
                     pid_stat[ pid_fields[ i - 1 ] ] = line.slice( Pid_field_length[ i - 1]...Pid_field_length[ i ] ).strip.lstrip
                 end
 
-                pid_stat[ "COMMAND" ] = line.slice( Pid_field_length.last )
+                pid_stat[ "COMMAND" ] = line.slice( Pid_field_length.last, line.length - Pid_field_length.last )
                 
                 pids.push pid_stat
                 line = peek_line
