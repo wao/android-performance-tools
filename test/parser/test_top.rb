@@ -65,10 +65,11 @@ __DATA__
 
         pids = nil
         assert_nothing_thrown do
-            pids = top.expect_pids
+            ret = top.expect_pids
+            pids = ret[0]
         end
 
-        assert_equal 4, pids[0].length
+        assert_equal 4, pids.length
         assert_equal "1120", pids[0]["PID"]
         assert_equal "1099", pids[1]["PID"]
         assert_equal "1096", pids[2]["PID"]
