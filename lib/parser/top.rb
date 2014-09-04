@@ -91,6 +91,7 @@ module Parser
                 end
 
                 pids.push pid_fields.zip(pid_values).to_h
+                line = peek_line
             end
         end
            
