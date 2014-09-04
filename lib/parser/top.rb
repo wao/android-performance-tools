@@ -67,7 +67,7 @@ module Parser
                 raise "expect Load average: but got '#{line}'"
             end
 
-            Load.new( fields[2].to_i, fields[3].to_i, fields[4].to_i )
+            Load.new( fields[2].to_f, fields[3].to_f, fields[4].to_f )
         end
 
         SEP_SPACES = /\s+/

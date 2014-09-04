@@ -61,6 +61,6 @@ __DATA__
             loadav = top.expect_load
         end
 
-        assert_equal "2.98", loadav.one 
+        assert_equal 2.98, loadav.one 
     end
 end
