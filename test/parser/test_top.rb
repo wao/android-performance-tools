@@ -108,5 +108,6 @@ __DATA__
             samples = top.parse
         end
         assert_equal 2, samples.length
+        assert_equal 4, top.pid_set.length
     end
 end
