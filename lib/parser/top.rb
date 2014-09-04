@@ -37,9 +37,12 @@ module Parser
         end
 
         def parse
+            samples = []
             while peek_line
-                parse_sample
+                samples << parse_sample
             end
+
+            samples
         end
 
         def parse_sample
