@@ -71,10 +71,16 @@ module Parser
         end
 
         SEP_SPACES = /\s+/
+
+        #Pid = Struct.new( :pid, :ppid, :user, :stat, :vsz, :vsz_usage, :cpu, :cpu_usage, :command )
+
+        Pid_field_length = [ 0, 6, 12, 22, 26, 32, 37, 41, 46 ] #last field COMMAND don't included
+
         def expect_pids
             line = get_line
+            
             pid_fields = line.split(SEP_SPACES)
-            if !pid_fields.include?('PID')
+            if pid_fields[0] != 'PID'
                 raise "expect PID but got #{line}"
             end
 
@@ -83,14 +89,15 @@ module Parser
             pids = []
             while line and !line.start_with? 'Mem:'
                 line = get_line
-                values = line.split(SEP_SPACES)
-                pid_values = values.slice( 0, pid_fields.length - 1 )
-                pid_values.push values.slice( pid_fields.length - 1, values.length - pid_fields.length + 1 ).join(' ')
-                if pid_values.length != pid_fields.length 
-                    raise "Unmatch field numbers for pid output #{line}"
+
+                pid_stat = {}
+                1.upto( Pid_field_length.length - 1 ) do |i|
+                    pid_stat[ pid_fields[ i - 1 ] ] = line.slice( Pid_field_length[ i - 1]...Pid_field_length[ i ] ).strip.lstrip
                 end
 
-                pids.push pid_fields.zip(pid_values).to_h
+                pid_stat[ "COMMAND" ] = line.slice( Pid_field_length.last )
+                
+                pids.push pid_stat
                 line = peek_line
             end
 
