@@ -78,5 +78,7 @@ __DATA__
 
         assert_equal "/applications/bin/tvos", pids[0]["COMMAND"]
         assert_equal "/system/bin/logcat -b system -b events -b main -b radio -K -n 20 -r 5000 -v threadtime -f /data/Logs/Log.0/logcat.log", pids[3]["COMMAND"]
+        assert_nil top.peek_line
+        assert_nil top.get_line
     end
 end
