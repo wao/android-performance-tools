@@ -99,7 +99,8 @@ module Parser
             if fields.shift != header
                 raise "expect #{header} but got '#{line}'"
             end
-
+ 
+            puts fields
             if ( fields.length % 2 ) != 0
                 raise "Format error of '#{line}'"
             end
