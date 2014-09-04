@@ -53,7 +53,7 @@ module Parser
             loadstat = expect_load
             ret = expect_pids
 
-            Sample.new( mem, cpu, loadstat, *ret )
+            Sample.new( mem, cpu, loadstat, ret[0], ret[1] )
         end
 
         def expect_mem
