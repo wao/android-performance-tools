@@ -55,5 +55,12 @@ __DATA__
         end
 
         assert_equal "4.3%", cpu["usr"]
+
+        loadav = nil
+        assert_nothing_thrown do
+            loadav = top.expect_load
+        end
+
+        assert_equals "2.98", loadav.one 
     end
 end
