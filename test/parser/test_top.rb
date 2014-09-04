@@ -67,5 +67,7 @@ __DATA__
         assert_nothing_thrown do
             pids = top.expect_pids
         end
+
+        assert_equal 4, pids.length
     end
 end
