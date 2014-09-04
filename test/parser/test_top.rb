@@ -71,7 +71,7 @@ __DATA__
         assert_equal 4, pids.length
         assert_equal "1120", pids[0]["PID"]
         assert_equal "1099", pids[1]["PID"]
-        assert_equal "1096", pids[1]["PID"]
-        assert_equal "1148", pids[1]["PID"]
+        assert_equal "1096", pids[2]["PID"]
+        assert_equal "1148", pids[3]["PID"]
     end
 end
