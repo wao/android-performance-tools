@@ -83,7 +83,9 @@ module Parser
             pids = []
             while line and !line.start_with? 'Mem:'
                 line = get_line
-                pid_values = line.split(SEP_SPACES)
+                values = line.split(SEP_SPACES)
+                pid_values = values.slice( 0, pid_fields.length - 1 )
+                pid_values.push values.slice( pid_fields.length - 1, values.length - pid_fields.length + 1 ).join(' ')
                 if pid_values.length != pid_fields.length 
                     raise "Unmatch field numbers for pid output #{line}"
                 end
