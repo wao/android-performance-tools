@@ -73,5 +73,8 @@ __DATA__
         assert_equal "1099", pids[1]["PID"]
         assert_equal "1096", pids[2]["PID"]
         assert_equal "1148", pids[3]["PID"]
+
+        assert_equal "/applications/bin/tvos", pids[0]["COMMAND"]
+        assert_equal "/system/bin/logcat -b system -b events -b main -b radio -K -n 20 -r 5000 -v threadtime -f /data/Logs/Log.0/logcat.log", pids[3]["COMMAND"]
     end
 end
