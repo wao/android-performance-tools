@@ -108,7 +108,7 @@ module Parser
                 line = peek_line
             end
 
-            [ pids, pidset ]
+            [ pids, pid_set ]
         end
            
 
