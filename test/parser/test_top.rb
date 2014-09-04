@@ -30,7 +30,9 @@ __DATA__
     def test_mem
         mem = nil
         top = Parser::Top.new(@io)
-        assert_nothing_thrown( mem = top.expect_mem )
+        assert_nothing_thrown do
+            mem = top.expect_mem
+        end
         assert_equal "727484K", mem["used"]
         assert_equal "12848K", mem["free"]
         assert_equal "0K", mem["shrd"]
