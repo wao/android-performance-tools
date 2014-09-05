@@ -1,0 +1,71 @@
+#!/usr/bin/env ruby
+#vim:ft=ruby
+
+$:.push File.dirname( File.realpath( __FILE__) ) + "/../lib"
+
+require 'parser/top'
+require 'csv'
+
+top = nil
+
+File.open ARGV[0] do |wr|
+    top = Parser::Top.new(wr)
+    top.parse
+end
+
+#process sample to an easy output result
+
+step = 0
+header = [ "pid", "seconds" ]
+totals = [ "-1", "total" ]
+data = { "-1"=>totals }
+max_value = {}
+top.samples.each do |sample|
+    header << step
+    total = 0
+    sample.pids.each do |pid_stat|
+       values = data[ pid_stat["PID"] ] 
+       if values.nil?
+           values = [ pid_stat["PID"], pid_stat["COMMAND"] ]
+           data[ pid_stat[ "PID" ] ] = values
+           max_value[ pid_stat[ "PID" ] ] = 0
+       end
+
+       values.length.upto( header.length - 2 ) do 
+           values << -0.1 #using negative indicate missing
+       end
+
+       values << pid_stat["%CPU"].to_f / 100
+
+       total += values.last
+
+       if values.last > max_value[ pid_stat[ "PID" ] ]
+           max_value[ pid_stat[ "PID"] ] = values.last
+       end
+    end
+    totals << total
+    step += 1
+end
+
+
+max_value.each_pair do |key,value|
+    if( value < 0.001 )
+        data.delete key
+    end
+end
+
+values = data.values
+
+CSV.open(ARGV[1], "wb") do |csv|
+    0.upto(header.length - 1 ) do |i|
+        row = []
+        row << header[i]
+        values.each do |value|
+            row << value[i]
+        end
+        csv << row
+    end
+
+end
+
+
