@@ -18,6 +18,7 @@ end
 step = 0
 header = [ "pid", "seconds" ]
 totals = [ "-1", "total" ]
+iowait = [ "-2", "iowait" ]
 data = { "-1"=>totals }
 max_value = {}
 top.samples.each do |sample|
@@ -44,12 +45,13 @@ top.samples.each do |sample|
        end
     end
     totals << total
+    iowait << sample.cpu["io"].chop.strip.to_f / 100
     step += 1
 end
 
 
 max_value.each_pair do |key,value|
-    if( value < 0.001 )
+    if( value < 0.05 )
         data.delete key
     end
 end

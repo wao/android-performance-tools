@@ -84,7 +84,7 @@ module Parser
 
         #Pid = Struct.new( :pid, :ppid, :user, :stat, :vsz, :vsz_usage, :cpu, :cpu_usage, :command )
 
-        Pid_field_length = [ 0, 5, 11, 21, 25, 31, 36, 40, 45 ] #last field COMMAND don't included
+        Pid_field_length = [ 0, 5, 11, 21, 25, 31, 36, 40, 44 ] #last field COMMAND don't included
 
         def expect_pids
             line = get_line
@@ -105,7 +105,16 @@ module Parser
                     pid_stat[ pid_fields[ i - 1 ] ] = line.slice( Pid_field_length[ i - 1]...Pid_field_length[ i ] ).strip.lstrip
                 end
 
-                pid_stat[ "COMMAND" ] = line.slice( Pid_field_length.last, line.length - Pid_field_length.last )
+                command_line = line.slice( Pid_field_length.last, line.length - Pid_field_length.last )
+                if command_line.include? "tvos"
+                   command_line = ">>/applications/bin/tvos<<"
+                end
+
+                if command_line.length > 30
+                    command_line = command_line.slice( 0, 50 )
+                end
+
+                pid_stat[ "COMMAND" ] = command_line
                  
                 pids.push pid_stat
                 @pid_set.add( pid_stat["PID"] )
