@@ -3,16 +3,12 @@ require 'set'
 module Parser
     # Parser busybox top -b output and put it into a list
     class Top
-        attr_reader :pid_set, :samples
-
         Load = Struct.new( :one, :five, :fifteen )
         Sample = Struct.new(:mem, :cpu, :load, :pids)
 
         def initialize(io)
             @io = io
             @peek_line = nil
-            @pid_set = Set.new
-            @samples = []
         end
 
         def get_line
@@ -42,23 +38,19 @@ module Parser
             @peek_line
         end
 
-        def parse
-            @samples = []
-            @pid_set = Set.new
+        def parse(&b)
             while peek_line
-                @samples << parse_sample
+                parse_sample(&b)
             end
-
-            @samples
         end
 
-        def parse_sample
+        def parse_sample(&b)
             mem = expect_mem
             cpu = expect_cpu
             loadstat = expect_load
             pids = expect_pids
 
-            Sample.new( mem, cpu, loadstat, pids )
+            b.call( Sample.new( mem, cpu, loadstat, pids ) )
         end
 
         def expect_mem
@@ -98,6 +90,7 @@ module Parser
 
             pids = []
             while line and !line.start_with? 'Mem:'
+                puts line
                 line = get_line
 
                 pid_stat = {}
@@ -117,7 +110,6 @@ module Parser
                 pid_stat[ "COMMAND" ] = command_line
                  
                 pids.push pid_stat
-                @pid_set.add( pid_stat["PID"] )
                 line = peek_line
             end
 
