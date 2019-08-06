@@ -14,7 +14,7 @@ top = nil
 step = 0
 header = [ "pid", "seconds" ] #Head column: pid, seconds, 1, 2, 3, 4, 4 ,5 ,6
 totals = [ "-1", "total" ]    #Total column: -1, total,   x ,x ,x
-iowait = [ "-2", "iowait" ]   #Iowait column:-2, iowait,  x, x, x, x
+# iowait = [ "-2", "iowait" ]   #Iowait column:-2, iowait,  x, x, x, x
 data = { "-1"=>totals }       #data: pid=>[x, x, x, x, x, x ]
 max_value = {}                #maxvalue: pid=>max_value
 
@@ -44,7 +44,7 @@ File.open ARGV[0] do |rh|
             end
         end
         totals << total
-        iowait << sample.cpu["io"].chop.strip.to_f #/ 100
+        # iowait << sample.cpu["io"].chop.strip.to_f #/ 100
         step += 1
     end
 end
@@ -57,6 +57,8 @@ max_value.each_pair do |key,value|
 end
 
 values = data.values
+
+exit
 
 CSV.open(ARGV[1], "wb") do |csv|
     0.upto(header.length - 1 ) do |i|

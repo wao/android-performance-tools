@@ -1,0 +1,6 @@
+#!/bin/sh
+while true
+do
+    top -b -n 1 -m 20 >> $1
+    sleep 1
+done
