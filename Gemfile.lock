@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (11.0.1)
+    cvs (0.1.0)
+    minitest (5.11.3)
+    shoulda-context (1.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  byebug
+  cvs
+  minitest
+  shoulda-context
+
+BUNDLED WITH
+   2.0.1

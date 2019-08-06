@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-class TestAndroidPerformanceTools < Test::Unit::TestCase
+class TestAndroidPerformanceTools < Minitest::Test
 
   def setup
   end

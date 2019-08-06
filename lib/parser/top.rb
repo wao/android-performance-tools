@@ -11,7 +11,7 @@ module Parser
             @peek_line = nil
         end
 
-        def get_line
+        def get_line(strip = true)
             if @peek_line
                 ret = @peek_line
                 @peek_line = nil
@@ -19,23 +19,31 @@ module Parser
                 ret = read_line
             end
 
-            ret
+            if strip
+              ret&.strip
+            else
+              ret
+            end
         end
 
         def read_line
             if @io.eof?
                 nil
             else
-                @io.readline.strip
+                @io.readline
             end
         end
 
-        def peek_line
+        def peek_line(strip=true)
             if @peek_line.nil?
                 @peek_line = read_line
             end
 
-            @peek_line
+            if strip
+              @peek_line&.strip
+            else
+              @peek_line
+            end
         end
 
         def parse(&b)
@@ -50,7 +58,8 @@ module Parser
             expect_swap
             cpu = expect_cpu
             # loadstat = expect_load
-            pids = expect_pids
+            pid_fields = expect_pids
+            pids = expect_processes(pid_fields)
 
             b.call( Sample.new( mem, cpu, nil, pids ) )
         end
@@ -98,6 +107,10 @@ module Parser
         def expect_pids
             line = get_line
 
+            parse_pids(line)
+        end
+
+        def parse_pids(line)
             line = line.gsub(/(\[|\])/, " ")
             
             pid_fields = line.split(SEP_SPACES)
@@ -109,25 +122,27 @@ module Parser
         end
 
         def expect_processes(pid_fields)
-            line = peek_line
+            line = peek_line(false)
 
             pids = []
             while line and !line.start_with? 'Tasks:'
-                line = get_line
+                line = get_line(false)
 
-                pids.push parse_process(pid_fields, line)
+                if !line.strip.empty?
+                  pids.push parse_process(pid_fields, line)
+                end
 
-                line = peek_line
+                line = peek_line(false)
             end
             
-            puts pids
+            # puts pids
 
             pids
         end
 
-        #PID USER         PR  NI VIRT  RES  SHR S[%CPU] %MEM     TIME+ ARGS  
-        #Pid = Struct.new( :pid, :ppid, :user, :stat, :vsz, :vsz_usage, :cpu, :cpu_usage, :command )
-        Pid_field_length = [ 0, 5, 18, 21, 24, 29, 34, 39, 41, 46, 52, 64] #last field COMMAND don't included
+        #                      PID USER         PR  NI VIRT  RES  SHR S[%CPU] %MEM     TIME+ ARGS  
+        #                      PID USER PR  NI VIRT RES SHR S[%CPU] %MEM     TIME+ ARGS  
+        Pid_field_length = [ 0, 5, 18,  21, 26, 30, 35, 40, 42, 47, 53, 64] #last field COMMAND don't included
 
         def parse_process(pid_fields, line)
           pid_stat = {}
@@ -135,7 +150,7 @@ module Parser
             pid_stat[ pid_fields[ i - 1 ] ] = line.slice( Pid_field_length[ i - 1]...Pid_field_length[ i ] ).strip.lstrip
           end
 
-          command_line = line.slice( Pid_field_length.last, line.length - Pid_field_length.last )
+          command_line = line.slice( Pid_field_length.last, line.length - Pid_field_length.last ).chop
 
           if command_line.length > 30
             command_line = command_line.slice( 0, 50 )
@@ -143,7 +158,7 @@ module Parser
 
           pid_stat[ "COMMAND" ] = command_line
 
-          pid_state
+          pid_stat
         end
 
 
@@ -154,7 +169,7 @@ module Parser
                 raise "expect #{header} but got '#{line}'"
             end
  
-            puts fields
+            # puts fields
             if ( fields.length % 2 ) != 0
                 raise "Format error of '#{line}'"
             end

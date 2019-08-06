@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/../test_helper.rb"
 
 require 'parser/top'
 
-class TestParserTop < Test::Unit::TestCase
+class TestParserTop < Minitest::Test
     def setup
         sample = <<__DATA__
 Mem: 727484K used, 12848K free, 0K shrd, 27448K buff, 195288K cached

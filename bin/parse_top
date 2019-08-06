@@ -58,8 +58,6 @@ end
 
 values = data.values
 
-exit
-
 CSV.open(ARGV[1], "wb") do |csv|
     0.upto(header.length - 1 ) do |i|
         row = []
