@@ -21,7 +21,7 @@ max_value = {}                #maxvalue: pid=>max_value
 File.open ARGV[0] do |rh|
     top = Parser::Top.new(rh)
     top.parse do |sample|
-        header << step
+        header << step * 5
         total = 0
         sample.pids.each do |pid_stat|
             values = data[ pid_stat["PID"] ] 
